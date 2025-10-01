@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024排水路徑</title>
+
+    <!-- bootstrap v5.0.0 -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+    <!-- CSS only -->
+    <link href="./SwmmMap/MapDisplay/css/myStyles.css" rel="stylesheet" />
+    <link href="./SwmmMap/MapDisplay/css/SwmmMap.css" rel="stylesheet" />
+
+    <!-- leaflet css -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <!-- 螞蟻 -->
+    <!-- <script src="https://unpkg.com/leaflet-ant-path" type="text/javascript"></script> -->
+    <script src="./leaflet-ant-path-bower-master/dist/leaflet-ant-path.js"></script>
+
+    <!-- 測量距離 -->
+    <link rel="stylesheet" type="text/css" href="./SwmmMap/measure/leaflet.measure.css" />
+    <script type="text/javascript" src="./SwmmMap/measure/leaflet.measure.js"></script>
+
+    <!-- flot chart -->
+    <link href="./SwmmMap/MapDisplay/css/flot.css" rel="stylesheet" />
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* 自定義標記的 CSS 類 */
+        .rotated-icon {
+            transform-origin: center;
+            transform: rotate(45deg);
+        }
+
+        /* 固定寬度表格 */
+        .fixed-table {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .fixed-td {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 地圖與總表 -->
+    <div id="map" class="map-responsive">
+        
+        <!-- messages -->
+        <div style="position:absolute;z-index: 402 !important;margin-left:50px;opacity: 1.0;">
+            <div class="w3-blue px-2 py-1 text-large">
+                <span id="msg"></span>
+            </div>
+            <div id="alertMessage" class="px-2 py-1 text-large text-white"></div>
+        </div>
+
+        <!-- profile chart -->
+        <div id="profile-chart" class="chart-container">
+            <div class="chart-title flex justify-content-between">
+                <div id="LinkID"></div>
+                <div id="profile-select-div"></div>
+            </div>
+
+            <!-- flot chart -->
+            <div class="flot-chart">
+                <div id="Chart_Hydrograph" class="demo-placeholder"></div>
+            </div>
+        </div>
+
+        <!-- 編輯排水路徑表格 -->
+        <div id="user-paths-edit-table" class="hide-right-panel"
+            style="position:absolute;z-index: 402 !important;right:180px;">
+        </div>
+
+        <!-- message -->
+        <div class="message-bottom">
+            <span id="alertMessage" class="message">MESSAGE FROM API</span>
+        </div>
+
+        <div class="d-flex m-1" style="position: absolute; right: 0px; z-index: 410;">
+            <!-- 打開路徑編輯 -->
+            <button type="button" style="margin-right:1px;" class="btn bg-primary btn-sm" id="open-path-edit-panel">
+                開啟路徑編輯
+            </button>
+
+            <!-- 打開或關閉按鈕 -->
+            <button type="button" class="btn bg-danger btn-sm" id="open-right-panel">
+                關閉
+            </button>
+        </div>
+
+        <!-- 地圖與查詢操作選項 -->
+        <!-- 右側1控制盤 預設為"隱藏" -->
+        <div id="right-panel" class="card shadow map-buttons-layer show-right-panel" style="width:120px;">
+
+        </div>
+
+        <!-- swmm summary table -->
+        <div id="swmm-card-container"></div>
+    </div>
+
+    <!--  -->
+
+    <!--  -->
+
+    <!-- footer -->
+    <footer>
+        <p class="p-4 bg-blue-600 text-light text-center">
+            版權所有© 2024 崇峻工程顧問有限公司；研發中，請勿對外發表!
+        </p>
+    </footer>
+
+    <!-- <script src="../Shared/loadHtml.js"></script> -->
+    <!--- jquery -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+
+    <!-- load header -->
+    <!-- <script src="./SwmmMap/js/loadHtml.js"></script> -->
+
+    <!-- Bootstrap v5.0.0 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-lpyLfhYuitXl2zRZ5Bn2fqnhNAKOAaM/0Kr9laMspuaMiZfGmfwRNFh8HlMy49eQ"
+        crossorigin="anonymous"></script>
+
+
+    <!-- 繪製箭頭 -->
+    <script src="https://unpkg.com/rbush@3.0.1/rbush.js"></script>
+    <script src="./SwmmMap/Common/leaflet-canvas-markers.js"></script>
+
+    <!-- flot core -->
+    <script src="./SwmmMap/MapDisplay/flot/jquery.flot.js"></script>
+    <script src="./SwmmMap/MapDisplay/flot/jquery.flot.time.js"></script>
+    <script src="./SwmmMap/MapDisplay/flot/jquery.flot.resize.js"></script>
+    <script src="./SwmmMap/MapDisplay/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="./SwmmMap/MapDisplay/flot/jquery.flot.axislabels.js"></script>
+    <script src="./SwmmMap/MapDisplay/flot/jquery.flot.dashes.js"></script>
+    <script src="./SwmmMap/MapDisplay/flot/jquery.flot.symbol.js"></script>
+    <script src="./SwmmMap/MapDisplay/flot/jquery.flot.fillbetween.js"></script>
+
+    <script src="./SwmmMap/MapDisplay/main.js" type="module"></script>
+
+</body>
+
+</html>

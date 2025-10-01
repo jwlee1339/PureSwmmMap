@@ -1,0 +1,73 @@
+/* 垂直排列 */
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+/*
+body{
+    height:100%;
+    margin: 0 !important;
+    padding:0 !important;
+}*/
+
+/* 小螢幕 */
+.map-responsive {
+    width: 100%;
+    height: 500px;
+    margin: 0px 0px;
+    position: relative;
+}
+/* 大螢幕 */
+@media only screen and (min-width: 600px) {
+    .info {
+        display: block;
+    }
+    .map-responsive {
+        width: 100%;
+        height: 100vh; /* 920px */
+        position: relative;
+    }
+}
+
+/* 右上角控制盤 */
+.map-buttons-layer{
+    position:absolute;
+    right:0px;
+    top:25px;
+    z-index: 410;
+}
+/* 打開右側控制盤 */
+.show-right-panel {
+    display: flex;
+    flex-direction: column;
+}
+/* 隱藏右側控制盤 */
+.hide-right-panel{
+    display:none;
+}
+/* ------------------ button ---------------------- */
+
+
+/* for myAlert.js */
+.message-bottom{
+    background-color: inherit;
+    position: absolute;
+    bottom:50px;
+    left: 5px;
+    color:#eee;
+    border-radius: 3px;
+    z-index:500;
+}
+.message {
+    display:none;    
+    padding: 0.5rem;
+}
+
+
+
+/* Arrow Head, ref: https://stackoverflow.com/questions/53307322/leaflet-polyline-arrows */
+.arrow-icon {
+	width: 12px;
+	height: 12px;
+}
+
