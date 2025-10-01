@@ -60,10 +60,10 @@
       "lng": "經度 (WGS84)",
       "lat": "緯度 (WGS84)"
     }
-    ```
+```
 
--   **`JUNCTIONS`**: 一個陣列，定義了匯流點（人孔）的屬性。
-    ```json
+- **`JUNCTIONS`**: 一個陣列，定義了匯流點（人孔）的屬性。
+```json
     {
       "name": "匯流點ID",
       "Elevation": "管底高程",
@@ -72,10 +72,10 @@
       "SurDepth": "溢淹深度",
       "Aponded": "積水面積"
     }
-    ```
+```
 
--   **`CONDUITS`**: 一個陣列，定義了管渠的屬性。
-    ```json
+- **`CONDUITS`**: 一個陣列，定義了管渠的屬性。
+```json
     {
       "name": "管渠ID",
       "From": "上游節點ID",
@@ -85,10 +85,10 @@
       "InOffset": "入口管底偏移",
       "OutOffset": "出口管底偏移"
     }
-    ```
+```
 
--   **`XSECTIONS`**: 一個陣列，定義了管渠的斷面形狀與尺寸。
-    ```json
+- **`XSECTIONS`**: 一個陣列，定義了管渠的斷面形狀與尺寸。
+```json
     {
       "Link": "對應的管渠ID",
       "Shape": "斷面形狀 (e.g., CIRCULAR, RECT_CLOSED)",
@@ -96,7 +96,7 @@
       "Geom2": "幾何參數2 (e.g., 寬度)",
       "Barrels": "管數"
     }
-    ```
+```
 
 ## DFS_Paths.json 路徑搜尋結果說明
 路徑搜尋的結果會儲存於 `MapDisplay/Data/DFS_Paths.json` 檔案中。此檔案包含一個 JSON 陣列，陣列中的每個物件代表一條從起點到終點的獨立路徑。
@@ -144,4 +144,5 @@
 3. 執行路徑搜尋功能。
 4. 結果將會顯示在地圖上，並產生對應的 `DFS_Paths.json` 檔案。
 ﻿
+
 
